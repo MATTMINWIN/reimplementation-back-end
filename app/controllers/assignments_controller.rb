@@ -213,7 +213,7 @@ class AssignmentsController < ApplicationController
   private
   # Only allow a list of trusted parameters through.
   def assignment_params
-    params.require(:assignment).permit(
+    permitted = params.require(:assignment).permit(
       :name,
       :title,
       :description,
@@ -234,6 +234,7 @@ class AssignmentsController < ApplicationController
       :review_topic_threshold,
       :maximum_number_of_reviews_per_submission,
       :review_strategy,
+      :review_assignment_strategy,
       :review_rubric_varies_by_round,
       :review_rubric_varies_by_topic,
       :review_rubric_varies_by_role,
@@ -244,6 +245,12 @@ class AssignmentsController < ApplicationController
       :is_review_done_by_teams,
       :allow_self_reviews,
       :reviews_visible_to_other_reviewers,
+      :num_reviews_required,
+      :num_reviews_allowed,
+      :is_anonymous,
+      :is_selfreview_enabled,
+      :team_members_have_duty,
+      :team_reviewing_enabled,
       :number_of_review_rounds,
       :days_between_submissions,
       :late_policy_id,
@@ -261,6 +268,13 @@ class AssignmentsController < ApplicationController
       notification_limits: [],
       reminder: []
     )
+
+    if permitted[:review_assignment_strategy].blank? && permitted[:review_strategy].present?
+      permitted[:review_assignment_strategy] = permitted[:review_strategy]
+    end
+
+    permitted.delete(:review_strategy)
+    permitted
   end
 
   # Helper method to determine staggered_and_no_topic for the assignment
