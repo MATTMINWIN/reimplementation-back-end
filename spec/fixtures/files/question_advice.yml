@@ -1,0 +1,13 @@
+#question_advice.yml
+
+question_advice_1:  
+  id: 1
+  question_id: 1
+  score: 5
+  advice: "This is some advice for question 1."
+
+question_advice_2:
+  id: 2
+  question_id: 2
+  score: 3
+  advice: "This is some advice for question 2."
